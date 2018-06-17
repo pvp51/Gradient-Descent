@@ -1,6 +1,10 @@
 import sys
 import math
 import random
+################
+##  py GradientDescent.py datafile trainlabelfile etaValue
+################
+
 
 def dotproduct(x, y):
     if(len(x) == len(y)):
@@ -9,14 +13,14 @@ def dotproduct(x, y):
             dp += x[i]*y[i]
     return dp
 
+################
+##Read Data
+################
 datafile = sys.argv[1]
 f = open(datafile)
 data = []
 i=0
 l=f.readline()
-################
-##Read Data
-################
 while(l != ''):
     a=l.split()
     l2=[]
