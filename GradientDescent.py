@@ -5,7 +5,9 @@ import random
 ##  py GradientDescent.py datafile trainlabelfile etaValue
 ################
 
-
+#############
+## Sub routines
+#############
 def dotproduct(x, y):
     if(len(x) == len(y)):
         dp = 0
@@ -57,13 +59,15 @@ while(l != ''):
 ############
 eta = float(sys.argv[3])
 
-##Initialize w 
+############
+##Initialize w
+############ 
 w=[]
 for i in range(0,cols):
     w.append(0.002*random.random()-0.001)
 
 ##################
-##Gradient descent
+##Gradient descent iteration
 ##################
 
 #eta = 0.0001
@@ -71,35 +75,36 @@ dellf = []
 for j in range(0, cols, 1):
     dellf.append(0)
 
-prevObjective = 10000000
-obj = prevObjective - 10
+lastObjective = 10000000
+objective = lastObjective - 10
 
-while(prevObjective - obj > eta):
-    prevObjective = obj
+while(lastObjective - objective > eta):
+    lastObjective = objective
     for j in range(0, cols, 1):
         dellf[j] = 0
-
+    
+    ## Computer dellf ##
     for i in range(0, rows, 1):
         if(trainlabels.get(i) != None):
             dp = dotproduct(w, data[i])
             for j in range(0, cols, 1):
-                dellf[j] += (trainlabels.get(i) - dp)*data[i][j]
+                dellf[j] = dellf[j] + ((trainlabels.get(i) - dp)*data[i][j])
 
     for j in range(0, cols, 1):
-        w[j] += eta * dellf[j]
+        w[j] = w[j] + (eta * dellf[j])
 
     ## Calculating error ##
     error = 0
     for i in range(0, rows, 1):
         if(trainlabels.get(i) != None):
-            error += (trainlabels.get(i) - dotproduct(w, data[i]))**2
-    obj = error
-    print ("Objective is : ", error)
+            error = error + (trainlabels.get(i) - dotproduct(w, data[i]))**2
+    objective = error
+    print("Objective is : ", error)
 
 print("w: ", w)
-wlength = math.sqrt(w[0]**2 + w[1]**2)
-dist_to_origin = abs(w[2])/wlength
-print("Distance to origin: ", dist_to_origin)
+normw = math.sqrt(w[0]**2 + w[1]**2)
+d_origin = abs(w[2])/normw
+print("Distance to origin: ", d_origin)
 
 ###########################
 ## Clasify unlabeled points
@@ -108,7 +113,7 @@ print("Distance to origin: ", dist_to_origin)
 for i in range(0, rows, 1):
     if(trainlabels.get(i) == None):
         dp = dotproduct(w, data[i])
-        if (dp < 0):
-            print("0 ", i)
-        else:
+        if (dp > 0):
             print("1 ", i)
+        else:
+            print("0 ", i)
